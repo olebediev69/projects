@@ -3,6 +3,10 @@
 from colorama import Fore,Back,Style
 import time
 
+# f = open('Users/oleksandrlebediev/PycharmProjects/projects/metadata.txt',w)
+#     f.write('Something')
+#     f.close()
+
 def game_status(basic_matrix):
     basic_matrix_values = list(basic_matrix.values())
     for i in range(0, 9, 3):
@@ -11,14 +15,14 @@ def game_status(basic_matrix):
 def logic_block(basic_matrix,leaderboard):
     basic_matrix_values = list(basic_matrix.values())
     winning_combinations = [
-        (0, 1, 2),  # horizontal top row
-        (3, 4, 5),  # horizontal middle row
-        (6, 7, 8),  # horizontal bottom row
-        (0, 3, 6),  # vertical left column
-        (1, 4, 7),  # vertical middle column
-        (2, 5, 8),  # vertical right column
-        (0, 4, 8),  # diagonal top-left to bottom-right
-        (2, 4, 6)  # diagonal top-right to bottom-left
+        (0, 1, 2),
+        (3, 4, 5),
+        (6, 7, 8),
+        (0, 3, 6),
+        (1, 4, 7),
+        (2, 5, 8),
+        (0, 4, 8),
+        (2, 4, 6)
     ]
 
     for combo in winning_combinations:
@@ -75,7 +79,9 @@ while True:
                 print(f'This game took {round(stop_time - start_time,0)} seconds')
                 break
         else:
-            print('The game has ended!')
+            game_status(basic_matrix)
+            print('This is draw!')
+            print(Fore.BLUE + 'The current leaderboard is: ' + Style.RESET_ALL + Fore.GREEN + 'X' + Style.RESET_ALL + f':{leaderboard["X"]} ' + Fore.RED + 'O' + Style.RESET_ALL + f':{leaderboard["O"]}')
     elif do_you_wanna_play.lower() == 'n':
         print('Thank you for playing!')
         break
