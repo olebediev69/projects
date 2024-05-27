@@ -1,0 +1,117 @@
+Game #1 
+
+• • •
+• • •
+• • •
+
+X • •
+• • •
+• • •
+
+X O •
+• • •
+• • •
+
+X O •
+• X •
+• • •
+
+X O O
+• X •
+• • •
+
+X O O
+• X •
+• • X
+
+Game winner is X 
+--- 
+This game took 7.0 seconds 
+--- 
+Game #2 
+
+• • •
+• • •
+• • •
+
+• • •
+• O •
+• • •
+
+X • •
+• O •
+• • •
+
+X • O
+• O •
+• • •
+
+X • O
+• O •
+X • •
+
+X • O
+• O •
+X • •
+
+X • O
+O O •
+X • •
+
+X • O
+O O X
+X • •
+
+X O O
+O O X
+X • •
+
+X O O
+O O X
+X X •
+
+X O O
+O O X
+X X O
+
+Draw 
+This game took -1.0 seconds 
+--- 
+Game #3 
+
+• • •
+• • •
+• • •
+
+• • •
+• O •
+• • •
+
+• X •
+• O •
+• • •
+
+• X •
+• O •
+O • •
+
+• X X
+• O •
+O • •
+
+O X X
+• O •
+O • •
+
+O X X
+X O •
+O • •
+
+O X X
+X O •
+O • O
+
+Game winner is O 
+--- 
+This game took 27.0 seconds 
+--- 
