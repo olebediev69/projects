@@ -1,5 +1,8 @@
 # tic tac toe game
+
 from colorama import Fore,Back,Style
+import time
+
 def game_status(basic_matrix):
     basic_matrix_values = list(basic_matrix.values())
     for i in range(0, 9, 3):
@@ -8,33 +11,36 @@ def game_status(basic_matrix):
 def logic_block(basic_matrix,leaderboard):
     basic_matrix_values = list(basic_matrix.values())
     winning_combinations = [
-        (0, 1, 2),
-        (3, 4, 5),
-        (6, 7, 8),
-        (0, 4, 8),
-        (2, 4, 6)
+        (0, 1, 2),  # horizontal top row
+        (3, 4, 5),  # horizontal middle row
+        (6, 7, 8),  # horizontal bottom row
+        (0, 3, 6),  # vertical left column
+        (1, 4, 7),  # vertical middle column
+        (2, 5, 8),  # vertical right column
+        (0, 4, 8),  # diagonal top-left to bottom-right
+        (2, 4, 6)  # diagonal top-right to bottom-left
     ]
 
     for combo in winning_combinations:
         if basic_matrix_values[combo[0]] == basic_matrix_values[combo[1]] == basic_matrix_values[combo[2]] == Fore.GREEN + 'X' + Style.RESET_ALL:
             leaderboard['X'] += 1
             return 'X'
-        elif basic_matrix_values[combo[0]] == basic_matrix_values[combo[1]] == basic_matrix_values[
-            combo[2]] == Fore.RED + 'O' + Style.RESET_ALL:
+        elif basic_matrix_values[combo[0]] == basic_matrix_values[combo[1]] == basic_matrix_values[combo[2]] == Fore.RED + 'O' + Style.RESET_ALL:
             leaderboard['O'] += 1
+            return 'O'
 
 leaderboard = {'X':0, 'O':0}
 
 while True:
     do_you_wanna_play = input(Fore.CYAN + "Do you wanna play (y/n):" + Style.RESET_ALL + ' ')
     if do_you_wanna_play.lower() == 'y':
+        start_time = time.time()
         basic_matrix = {
                         1: '•', 2: '•', 3: '•',
                         4: '•', 5: '•', 6: '•',
                         7: '•', 8: '•', 9: '•'
         }
         previous_move = []
-        print(leaderboard['X'], leaderboard['O'])
         print('Current game status is:')
         while '•' in basic_matrix.values():
             game_status(basic_matrix)
@@ -65,6 +71,8 @@ while True:
                 game_status(basic_matrix)
                 print(Fore.LIGHTCYAN_EX + f'\n {winner} wins! \n' + Style.RESET_ALL)
                 print(Fore.BLUE + 'The current leaderboard is: ' + Style.RESET_ALL + Fore.GREEN + 'X' + Style.RESET_ALL + f':{leaderboard["X"]} ' + Fore.RED + 'O' + Style.RESET_ALL + f':{leaderboard["O"]}')
+                stop_time = time.time()
+                print(f'This game took {round(stop_time - start_time,0)} seconds')
                 break
         else:
             print('The game has ended!')
