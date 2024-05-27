@@ -1,4 +1,4 @@
-# tic tac toe game
+# tic-tac-toe game
 
 from colorama import Fore,Back,Style
 import time
