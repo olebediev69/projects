@@ -25,8 +25,7 @@ X O O
 • • X
 
 Game winner is X 
---- 
-This game took 7.0 seconds 
+This game took 6.0 seconds 
 --- 
 Game #2 
 
@@ -35,47 +34,43 @@ Game #2
 • • •
 
 • • •
-• O •
+• X •
 • • •
 
-X • •
-• O •
+O • •
+• X •
 • • •
 
-X • O
-• O •
-• • •
-
-X • O
-• O •
+O • •
+• X •
 X • •
 
-X • O
-• O •
+O • O
+• X •
 X • •
 
-X • O
-O O •
+O X O
+• X •
 X • •
 
-X • O
-O O X
-X • •
+O X O
+• X •
+X O •
 
-X O O
-O O X
-X • •
+O X O
+• X •
+X O X
 
-X O O
-O O X
-X X •
+O X O
+O X •
+X O X
 
-X O O
-O O X
-X X O
+O X O
+O X X
+X O X
 
 Draw 
-This game took -1.0 seconds 
+This game took -2.0 seconds
 --- 
 Game #3 
 
@@ -84,34 +79,22 @@ Game #3
 • • •
 
 • • •
+• • •
+• • •
+
+• O •
+• • •
+• • •
+
+• O •
+• • •
+• • •
+
+X O •
+• • •
+• • •
+
+X O •
 • O •
 • • •
 
-• X •
-• O •
-• • •
-
-• X •
-• O •
-O • •
-
-• X X
-• O •
-O • •
-
-O X X
-• O •
-O • •
-
-O X X
-X O •
-O • •
-
-O X X
-X O •
-O • O
-
-Game winner is O 
---- 
-This game took 27.0 seconds 
---- 

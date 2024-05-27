@@ -43,7 +43,10 @@ leaderboard = {'X':0, 'O':0}
 game_number = 0
 
 while True:
-    do_you_wanna_play = input(Fore.CYAN + "Do you wanna play (y/n):" + Style.RESET_ALL + ' ')
+    try:
+        do_you_wanna_play = input(Fore.CYAN + "Do you wanna play (y/n):" + Style.RESET_ALL + ' ')
+    except ValueError:
+        continue
     if do_you_wanna_play.lower() == 'y':
         game_number += 1
         metadata.write(f'Game #{game_number} \n')
@@ -92,6 +95,7 @@ while True:
                 break
         else:
             game_status(basic_matrix,metadata)
+            stop_time = time.time()
             metadata.write('Draw \n')
             metadata.write(f'This game took {round(stop_time - start_time, 0)} seconds \n')
             metadata.write('--- \n')
