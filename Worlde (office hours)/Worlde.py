@@ -55,7 +55,7 @@ while counter != 5:
 
                     # validation: if letter exists in hidden_word and on the right place
                     elif letter in hidden_word and pair[0] != pair[1]:
-                        colored_word_list.append(Fore.MAGENTA + letter + Style.RESET_ALL)
+                        colored_word_list.append(Fore.YELLOW + letter + Style.RESET_ALL)
 
             # joining the list of the colorful symbols into word
             print(''.join(colored_word_list))
@@ -64,8 +64,9 @@ while counter != 5:
             counter += 1
     else:
         print('You have entered wrong word or not word at all!')
-
-print('You are out of tries!')
+while guessed_word != hidden_word:
+    print('You are out of tries!')
+    break
 
 # If you have any additional questions
 # telegram: @osygne, slack: Oleksandr Lebediev
