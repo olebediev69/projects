@@ -1,0 +1,18 @@
+Alice's average grade: 74
+Bob's average grade: 64
+Charlie's average grade: 59
+David's average grade: 64
+Emily's average grade: 80
+Frank's average grade: 83
+Grace's average grade: 81
+Henry's average grade: 80
+Ivy's average grade: 81
+Jack's average grade: 93
+
+ The highest grade is 100
+
+ The lowest grade is 20
+
+ The mean grade is 77
+
+ The mode grade is 100

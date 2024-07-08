@@ -51,3 +51,4 @@ while True:
                 break
             else:
                 print(Red + '\nYou have entered a strange value, try again\n' + Style_reset)
+                continue

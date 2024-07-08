@@ -1,5 +1,4 @@
 length = int(input('Enter the length: '))
-
 if length % 2 == 0:
     print("Please enter an odd number.")
 else:

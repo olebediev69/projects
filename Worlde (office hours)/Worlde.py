@@ -1,6 +1,6 @@
 # import of choice function from random library and Fore,Style from colorama library
 from random import choice
-from colorama import Fore,Style
+from colorama import Fore,Style,Back
 
 ### creating block
 
@@ -47,15 +47,15 @@ while counter != 5:
                     if letter in hidden_word and pair[0] == pair[1]:
 
                         # Fore.{Color_Name} makes the text that color, and Style.RESEL_ALL stops this formatting
-                        colored_word_list.append(Fore.GREEN + letter + Style.RESET_ALL)
+                        colored_word_list.append(Back.GREEN + Fore.BLACK + letter + Style.RESET_ALL)
 
                     # validation: if letter doesn't exist in hidden_word
                     elif letter not in hidden_word:
-                        colored_word_list.append(Fore.RED + letter + Style.RESET_ALL)
+                        colored_word_list.append(Back.RED + Fore.BLACK + letter + Style.RESET_ALL)
 
                     # validation: if letter exists in hidden_word and on the right place
                     elif letter in hidden_word and pair[0] != pair[1]:
-                        colored_word_list.append(Fore.YELLOW + letter + Style.RESET_ALL)
+                        colored_word_list.append(Back.YELLOW + Fore.BLACK + letter + Style.RESET_ALL)
 
             # joining the list of the colorful symbols into word
             print(''.join(colored_word_list))
