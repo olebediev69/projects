@@ -15,7 +15,7 @@ def game_status(basic_matrix,metadata):
     for i in range(0, 9, 3):
         row = f"{basic_matrix_values[i]} {basic_matrix_values[i + 1]} {basic_matrix_values[i + 2]}"
         print(row)
-        metadata.write(remove_colorama_formatting(row) + '\n')
+        metadata.write(remove_colorama_formatting(row) + '\n')ƒ
     metadata.write('\n')
 
 def logic_block(basic_matrix,leaderboard):
