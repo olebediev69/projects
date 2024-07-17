@@ -7,7 +7,7 @@ customtkinter.set_appearance_mode('dark')
 customtkinter.set_default_color_theme('dark-blue')
 
 
-class App:
+class TicTacToe:
     def __init__(self):
         self.turn = True
         self.winner_combinations = [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]
@@ -90,4 +90,6 @@ class App:
         for button in self.buttons:
             button.configure(state='normal', text=' ', fg_color='#20548c')
 
-App()
+
+if __name__ == '__main__':
+    TicTacToe()
