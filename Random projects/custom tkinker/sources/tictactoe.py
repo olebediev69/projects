@@ -16,7 +16,7 @@ class TicTacToe:
 
         self.root.geometry('500x200')
         self.root.resizable(False,False)
-        self.root.title('Tic-Tac-Toe using Custom Tkinter')
+        self.root.title('Tic-Tac-Toe game')
 
         self.menu = Menu(self.root)
         self.root.configure(menu=self.menu)

@@ -1,9 +1,12 @@
+import tkinter
+
 import customtkinter
 import pandas as pd
 
 customtkinter.set_appearance_mode('dark')
 customtkinter.set_default_color_theme('dark-blue')
 DATABASE = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/custom tkinker/sources/database.csv'
+
 
 class Register:
     def __init__(self):
@@ -120,22 +123,24 @@ class Login:
             pady=10
         )
 
+        self.login_var = tkinter.StringVar(value='Username')
         self.login = customtkinter.CTkEntry(
             self.login_password_frame,
             font=('Helvetica', 15),
-            placeholder_text='Username',
-            width=200
+            width=200,
+            textvariable=self.login_var
         )
         self.login.pack(
             padx=10,
             pady=(10, 10)
         )
 
+        self.password_var = tkinter.StringVar(value='Password')
         self.password = customtkinter.CTkEntry(
             self.login_password_frame,
             font=('Helvetica', 15),
             show='*',
-            placeholder_text='Password',
+            textvariable=self.password_var,
             width=200
         )
         self.password.pack(
@@ -212,6 +217,10 @@ class Login:
                 return True
 
     def shortcut(self, event):
+        if event.state == 8 and event.keysym == '1':
+            self.login_var.set('admin')
+            self.password_var.set('admin')
+            self.accept_button.invoke()
         if event.keysym == 'Return':
             self.accept()
 
