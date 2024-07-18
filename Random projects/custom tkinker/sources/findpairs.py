@@ -40,10 +40,19 @@ class FindPairs:
         self.counter = 0
         self.similarity = set()
         self.buttons_pressed = set()
-        self.tries = 4
+        self.tries = 2
 
         # matrix debug
         self.main_matrix = place_signs(create_matrix())
+
+        # tries display
+        self.tries_display = customtkinter.CTkLabel(
+            master=self.master,
+            font=('Calibri', 20, 'bold'),
+            text=f'Tries: {self.tries}',
+        )
+        self.tries_display.pack(padx=5, pady=5)
+        self.master.update()
 
         # frame
         self.frame = customtkinter.CTkFrame(
@@ -118,10 +127,14 @@ class FindPairs:
 
         self.master.mainloop()
 
+    def update_tries_display(self):
+        self.tries_display.configure(text=f'Tries: {self.tries}')
+
     def reset_game(self):
         self.main_matrix = place_signs(create_matrix())
         self.unlock_buttons()
         self.tries = 4
+        self.update_tries_display()
 
     def show_buttons(self):
         for index, button in enumerate(self.buttons_list, start=1):
@@ -174,6 +187,7 @@ class FindPairs:
                 self.paint_button('darkred')
                 self.master.after(1000, self.hide_buttons)
                 self.tries -= 1
+                self.update_tries_display()
         self.master.after(200, self.victory_check)
 
 
