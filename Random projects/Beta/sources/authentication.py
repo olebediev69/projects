@@ -7,8 +7,8 @@ from tkinter import messagebox
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme('blue')
 
-data_df = pd.read_csv('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/data.csv')
-DATA_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/data.csv'
+data_df = pd.read_csv('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/data.csv')
+DATA_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/data.csv'
 
 
 def reload_df(path):
