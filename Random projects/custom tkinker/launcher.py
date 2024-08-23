@@ -2,6 +2,7 @@ import customtkinter
 from sources.tictactoe import TicTacToe
 from sources.authentication import Login
 from sources.findpairs import FindPairs
+from sources.stackscalculator import MCalculator
 
 
 customtkinter.set_appearance_mode('dark')
@@ -18,7 +19,7 @@ class Launcher:
         self.label.pack(padx=10, pady=10)
 
         self.start_option = customtkinter.StringVar(value='')
-        self.option_select = customtkinter.CTkOptionMenu(self.root, values=['', 'Tic-Tac-Toe','Find Pairs'],
+        self.option_select = customtkinter.CTkOptionMenu(self.root, values=['', 'Tic-Tac-Toe', 'Find Pairs', 'MCalculator'],
                                                          variable=self.start_option)
         self.option_select.pack(padx=10, pady=10)
 
@@ -32,6 +33,8 @@ class Launcher:
             TicTacToe()
         elif self.option_select.get() == 'Find Pairs':
             FindPairs()
+        elif self.option_select.get() == 'MCalculator':
+            MCalculator()
 
 
 if Login():
