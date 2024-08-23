@@ -32,7 +32,7 @@ def duplicate_check(login):
     return login not in data_df['Login'].values
 
 
-class Registration_window(ctk.CTkToplevel):
+class RegistrationWindow(ctk.CTkToplevel):
     def __init__(self):
         super().__init__()
         self.title('Registration')
@@ -272,7 +272,7 @@ class LoginWindow(tk.Tk):
 
     def registration(self):
         if self.registration_window is None or not self.registration_window.winfo_exists():
-            self.registration_window = Registration_window()
+            self.registration_window = RegistrationWindow()
         else:
             self.registration_window.focus()
 
