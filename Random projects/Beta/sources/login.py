@@ -115,7 +115,7 @@ class Registration_window(ctk.CTkToplevel):
         )
 
     def info_message(self, message, color):
-        self.error_field.configure(text=message, bg_color=color)
+        self.error_field.configure(text=message, text_color=color)
         self.update_idletasks()
 
     def proceed_registration(self):
@@ -231,6 +231,7 @@ class LoginWindow(tk.Tk):
             font=('Calibri', 10),
             height=10,
             command=self.registration,
+            fg_color='darkcyan'
         )
         self.registration_label.pack(
             padx=10,
@@ -242,21 +243,21 @@ class LoginWindow(tk.Tk):
         self.mainloop()
 
     def info_message(self, message, color):
-        self.error_field.configure(text=message, color=color)
+        self.error_field.configure(text=message, text_color=color)
         self.update_idletasks()
 
     def proceed_login(self):
-        if self.login_entry.get() == '' or self.password_entry.get() == '':
+        if self.login_entry.get().strip() == '' or self.password_entry.get().strip() == '':
             self.error_field.configure(text="You haven't entered some data", text_color='red')
         else:
-            login = self.login_entry.get()
-            password = self.password_entry.get()
+            login = self.login_entry.get().strip()
+            password = self.password_entry.get().strip()
             if login in data_df['Login'].values:
                 actual_password = data_df.loc[data_df['Login'] == login, 'Password'].values[0]
                 if password == actual_password:
                     self.after(500, lambda: self.info_message('Login successful', 'green'))
-                    self.after(1000, lambda: self.info_message('Quitting...', 'black'))
-                    self.after(2000, self.destroy)
+                    self.after(1500, lambda: self.info_message('Quitting...', 'black'))
+                    self.after(3000, self.destroy)
                     return True
                 else:
                     self.error_field.configure(text="You have entered wrong data", text_color='red')
