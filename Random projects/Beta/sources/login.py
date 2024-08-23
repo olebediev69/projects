@@ -36,7 +36,7 @@ class Registration_window(ctk.CTkToplevel):
     def __init__(self):
         super().__init__()
         self.title('Registration')
-        self.geometry('400x420')
+        self.geometry('400x380')
         self.resizable(True, False)
 
         # registration label
