@@ -20,6 +20,14 @@ def create_files():
         })
         df.to_csv('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/colivings.csv', index=False)
 
+    if not os.path.exists('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/ranges.csv'):
+        df = pd.DataFrame({
+            'Locations': [],
+            'Areas': [],
+            'Prices': [],
+        })
+        df.to_csv('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/ranges.csv', index=False)
+
 
 if __name__ == '__main__':
     create_files()
