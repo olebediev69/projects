@@ -12,8 +12,11 @@ def create_files():
 
     if not os.path.exists('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/colivings.csv'):
         df = pd.DataFrame({
-            'Login': [],
-            'Password': []
+            'Name': [],
+            'Location': [],
+            'Area': [],
+            'State': [],
+            'Price': [],
         })
         df.to_csv('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/colivings.csv', index=False)
 

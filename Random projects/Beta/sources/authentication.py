@@ -2,6 +2,7 @@ import tkinter as tk
 import customtkinter as ctk
 import pandas as pd
 from tkinter import messagebox
+from numpy import int64
 
 # set the default appearance
 ctk.set_appearance_mode('dark')
@@ -19,9 +20,9 @@ def reload_df(path):
 
 def add_data(login, password):
     global data_df
-    new_info = pd.DataFrame([{'Login': login, 'Password': password}])
     if not duplicate_check(login):
         return "Duplicate entry exists"
+    new_info = pd.DataFrame([{'Login': login, 'Password': password}])
     new_info_df = pd.concat([data_df, new_info], ignore_index=True)
     new_info_df.to_csv(DATA_PATH, index=False)
     reload_df(DATA_PATH)
@@ -124,16 +125,13 @@ class RegistrationWindow(ctk.CTkToplevel):
         if confirmation == 'yes':
             login = self.login_entry.get()
             password = self.password_entry.get()
-            if duplicate_check(login):
-                message = add_data(login, password)
-                if message:
-                    self.info_message(message, 'red')
-                else:
-                    self.after(500, lambda: self.info_message('Registration successful!', 'green'))
-                    self.after(1500, lambda: self.info_message('Quitting...', 'black'))
-                    self.after(3000, self.destroy)
-            else:
+            message = add_data(login, password)
+            if message == "Duplicate entry exists":
                 self.info_message('Profile already exists', 'red')
+            else:
+                self.after(500, lambda: self.info_message('Registration successful!', 'green'))
+                self.after(1500, lambda: self.info_message('Quitting...', 'black'))
+                self.after(3000, self.destroy)
 
     def show_password(self):
         if self.checkbox_var.get() == 'on':
@@ -248,10 +246,14 @@ class LoginWindow(tk.Tk):
 
     def proceed_login(self):
         if self.login_entry.get().strip() == '' or self.password_entry.get().strip() == '':
-            self.error_field.configure(text="You haven't entered some data", text_color='red')
+            self.info_message("You haven't entered some data", 'red')
         else:
             login = self.login_entry.get().strip()
+            if login.isnumeric():
+                login = int64(login)
             password = self.password_entry.get().strip()
+            if password.isnumeric():
+                password = int64(password)
             if login in data_df['Login'].values:
                 actual_password = data_df.loc[data_df['Login'] == login, 'Password'].values[0]
                 if password == actual_password:
@@ -260,9 +262,9 @@ class LoginWindow(tk.Tk):
                     self.after(3000, self.destroy)
                     return True
                 else:
-                    self.error_field.configure(text="You have entered wrong data", text_color='red')
+                    self.info_message("You have entered wrong data", 'red')
             else:
-                self.error_field.configure(text="You have entered wrong data", text_color='red')
+                self.info_message("You have entered wrong data", 'red')
 
     def show_password(self):
         if self.checkbox_var.get() == 'on':
