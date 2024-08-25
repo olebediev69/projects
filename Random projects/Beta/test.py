@@ -82,6 +82,7 @@ class AppWindow(tk.Tk):
 
         self.create_ui()
         self.refresh_col_list()
+        self.refresh_ui()
 
         self.add_window = None
 
@@ -104,10 +105,11 @@ class AppWindow(tk.Tk):
         self.name.delete(0, tk.END)
         self.name.configure(placeholder_text='Name')
         self.location.set('Location')
+        self.area.configure(to=max(self.int_areas_list) if self.int_areas_list else 100)
         self.area_var.set(0)
         self.state_var.set('State')
         self.price_var.set('Price')
-        self.apply_filters_button.invoke()
+        self.update_options()
 
     def clear_col_list(self):
         global col_df, ranges_df
@@ -119,21 +121,27 @@ class AppWindow(tk.Tk):
 
         self.refresh_ui()
 
-    def refresh_ui(self):
-        self.update_options()
-        self.refresh_col_list()
-        self.apply_filters_button.invoke()
-
     def update_options(self):
         self.locations_list = [str(i) for i in col_df['Location'].unique()]
         self.areas_list = [str(i) for i in col_df['Area'].unique()]
         self.prices_list = [str(i) for i in col_df['Price'].unique()]
 
+        # Update OptionMenus
         self.location['values'] = self.locations_list
         self.price['values'] = self.prices_list
-        self.area['values'] = self.areas_list
 
-        self.area.configure(to=max(self.int_areas_list) if self.int_areas_list else 100)
+        # Update the slider list and recalculate the max value for areas
+        self.int_areas_list = [int(i.split()[0]) for i in self.areas_list if i.split()[0].isdigit()]
+        max_area = max(self.int_areas_list) if self.int_areas_list else 100  # Default to 100 if list is empty
+        self.area.configure(to=max_area)
+
+        # Refresh display in case values have changed
+        self.area_display.configure(text=f'Area: {self.area.get()} m^2')
+        self.refresh_col_list()
+
+    def refresh_ui(self):
+        self.update_options()
+        self.apply_filters_button.invoke()
 
     def create_ui(self):
         ###
@@ -223,7 +231,6 @@ class AppWindow(tk.Tk):
             master=self.filters_panel,
             width=80,
             from_=0,
-            to=(max(self.int_areas_list) if self.int_areas_list else 1),
             command=self.update_area_display,
             variable=self.area_var,
         )
@@ -292,8 +299,9 @@ class AppWindow(tk.Tk):
         )
 
     def apply_filters(self):
+        # Just update the display based on current filter settings
         print('Filters debug message:')
-        print(f'Name: {self.name.get() if self.name.get() != '' else None}')
+        print(f'Name: {self.name.get() if self.name.get() else None}')
         print(f'Area: {self.area.get()}')
         print(f'State: {self.state.get()}')
         print(f'Price: {self.price.get()}')
@@ -520,12 +528,18 @@ class AddWindow(tk.Toplevel):
                     self.master.refresh_col_list()
 
     def auto_data_fill(self, event):
+        print("Key Pressed:", event.char, event.keysym, event.keycode)
         if event.char == '=' and event.state == 8:
             self.name_var.set('Trap Xata')
             self.location_var.set('Lesi Ukrainky 30B')
             self.area_var.set('440')
             self.state.set('Excellent')
             self.price_var.set('40000')
+        self.name.update()
+        self.location.update()
+        self.area.update()
+        self.state.update()
+        self.price.update()
 
 
 if __name__ == '__main__':
