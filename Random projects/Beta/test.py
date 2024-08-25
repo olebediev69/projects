@@ -126,16 +126,13 @@ class AppWindow(tk.Tk):
         self.areas_list = [str(i) for i in col_df['Area'].unique()]
         self.prices_list = [str(i) for i in col_df['Price'].unique()]
 
-        # Update OptionMenus
         self.location['values'] = self.locations_list
         self.price['values'] = self.prices_list
 
-        # Update the slider list and recalculate the max value for areas
         self.int_areas_list = [int(i.split()[0]) for i in self.areas_list if i.split()[0].isdigit()]
-        max_area = max(self.int_areas_list) if self.int_areas_list else 100  # Default to 100 if list is empty
+        max_area = max(self.int_areas_list) if self.int_areas_list else 100
         self.area.configure(to=max_area)
 
-        # Refresh display in case values have changed
         self.area_display.configure(text=f'Area: {self.area.get()} m^2')
         self.refresh_col_list()
 
@@ -299,7 +296,6 @@ class AppWindow(tk.Tk):
         )
 
     def apply_filters(self):
-        # Just update the display based on current filter settings
         print('Filters debug message:')
         print(f'Name: {self.name.get() if self.name.get() else None}')
         print(f'Area: {self.area.get()}')
@@ -330,19 +326,19 @@ class AppWindow(tk.Tk):
 
     def apply_condition_filters(self, conditions):
         filter_name = self.name.get()
-        filter_area = self.area.get()  # Assuming this returns the actual value from the slider
-        filter_state = self.state_var.get()  # Ensure to use get() method on StringVar
-        filter_price = self.price_var.get()  # Same here, use get()
+        filter_area = self.area.get()
+        filter_state = self.state_var.get()
+        filter_price = self.price_var.get()
 
         if filter_name:
             conditions &= col_df['Name'].str.contains(filter_name, case=False, na=False)
-        if filter_area != 0:  # Assuming slider returns 0 for 'no filter'
+        if filter_area != 0:
             filter_area_str = f"{filter_area} m^2"
             conditions &= col_df['Area'] == filter_area_str
-        if filter_state != "State":  # Check if the default is "State"
+        if filter_state != "State":
             conditions &= col_df['State'] == filter_state
-        if filter_price != "Price":  # Check if the default is "Price"
-            price_num = int(filter_price.replace('$', '').split('/')[0])  # Clean the price string
+        if filter_price != "Price":
+            price_num = int(filter_price.replace('$', '').split('/')[0])
             filter_price_str = f"${price_num}/month"
             conditions &= col_df['Price'] == filter_price_str
 
@@ -495,11 +491,10 @@ class AddWindow(tk.Toplevel):
         )
 
     def init_filters(self):
-        # Set all filters to default "no filter" state
-        self.name.set('')  # Assuming an Entry for names
-        self.area.set('0')  # Assuming a Slider starts at 0 for no filter
-        self.state.set('Select State')  # Assuming an OptionMenu with 'Select State' as no filter
-        self.price.set('0')  # Assuming a Slider or Entry defaults to 0 for no filter
+        self.name.set('')
+        self.area.set('0')
+        self.state.set('Select State')
+        self.price.set('0')
 
     def info_display(self, text, color):
         self.info.configure(text=text, text_color=color)

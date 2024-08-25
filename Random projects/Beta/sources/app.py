@@ -59,7 +59,6 @@ class AppWindow(tk.Tk):
         self.title('Application')
         self.geometry('800x800')
 
-        # lists for available options
         self.locations_list = [str(i) for i in ranges_df['Locations'].unique()]
         self.areas_list = [str(i) for i in ranges_df['Areas'].unique()]
         self.prices_list = [str(i) for i in ranges_df['Prices'].unique()]
