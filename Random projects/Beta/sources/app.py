@@ -30,15 +30,15 @@ def save_data(name, location, area, state, price):
         'Location': location,
         'Area': f'{area} m^2',
         'State': state,
-        'Price': f'${price}',
-                              }])
+        'Price': f'${price}/month',
+    }])
     new_info_col_df = pd.concat([col_df, new_info_col], ignore_index=True)
     new_info_col_df.to_csv(COL_PATH, index=False)
 
     new_info_ranges = pd.DataFrame([{
         'Locations': location,
         'Areas': f'{area} m^2',
-        'Prices': f'${price}',
+        'Prices': f'${price}/month',
     }])
     new_info_ranges_df = pd.concat([ranges_df, new_info_ranges], ignore_index=True)
     new_info_ranges_df.to_csv(RANGES_PATH, index=False)
@@ -58,13 +58,20 @@ class AppWindow(tk.Tk):
         self.list_option_frame = None
         self.title('Application')
         self.geometry('800x800')
-        self.update()
 
         # lists for available options
         self.locations_list = [str(i) for i in ranges_df['Locations'].to_list()]
         self.areas_list = [str(i) for i in ranges_df['Areas'].to_list()]
         self.prices_list = [str(i) for i in ranges_df['Prices'].to_list()]
 
+        self.create_ui()
+        self.refresh_col_list()
+
+        self.add_window = None
+
+        self.mainloop()
+
+    def create_ui(self):
         # hosts panel
         self.hosts_panel = ctk.CTkFrame(
             master=self,
@@ -85,7 +92,7 @@ class AppWindow(tk.Tk):
             command=self.add_col,
         )
         self.add_col.pack(
-            padx=(10,5),
+            padx=(10, 5),
             pady=5,
             anchor='w',
         )
@@ -166,19 +173,14 @@ class AppWindow(tk.Tk):
             pady=(0, 30),
         )
 
-        self.refresh_col_list()
-
-        self.add_window = None
-
-        self.mainloop()
-
     def add_col(self):
         if self.add_window is None or not self.add_window.winfo_exists():
-            self.add_window = AddWindow()
+            self.add_window = AddWindow(self)
         else:
             self.add_window.focus()
 
     def refresh_col_list(self):
+
         def divider(master):
             div = ctk.CTkLabel(
                 master=master,
@@ -261,11 +263,13 @@ class AppWindow(tk.Tk):
                 padx=10,
                 pady=10,
             )
+        self.update_idletasks()
 
 
 class AddWindow(tk.Toplevel):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, master):
+        super().__init__(master)
+        self.master = master
         self.title("New Coliving")
         self.geometry("400x300")
         self.resizable(False, False)
@@ -417,6 +421,7 @@ class AddWindow(tk.Toplevel):
                     self.after(1000, lambda: self.info_display('Done', 'green'))
                     self.after(2000, lambda: self.info_display('Exiting...', 'gray'))
                     self.after(3000, self.destroy)
+                    self.master.refresh_col_list()
 
     def auto_data_fill(self, event):
         if event.char == '=' and event.state == 8:
@@ -428,4 +433,5 @@ class AddWindow(tk.Toplevel):
 
 
 if __name__ == '__main__':
-    AppWindow()
+    app = AppWindow()
+    app.mainloop()
