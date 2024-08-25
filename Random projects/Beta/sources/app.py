@@ -192,6 +192,9 @@ class AppWindow(tk.Tk):
                 padx=10
             )
 
+        for widget in self.col_list.winfo_children():
+            widget.destroy()
+
         for i in range(0, len(col_df)):
             frame = ctk.CTkFrame(
                 master=self.col_list,
