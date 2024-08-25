@@ -60,9 +60,9 @@ class AppWindow(tk.Tk):
         self.geometry('800x800')
 
         # lists for available options
-        self.locations_list = [str(i) for i in ranges_df['Locations'].to_list()]
-        self.areas_list = [str(i) for i in ranges_df['Areas'].to_list()]
-        self.prices_list = [str(i) for i in ranges_df['Prices'].to_list()]
+        self.locations_list = [str(i) for i in ranges_df['Locations'].unique()]
+        self.areas_list = [str(i) for i in ranges_df['Areas'].unique()]
+        self.prices_list = [str(i) for i in ranges_df['Prices'].unique()]
 
         self.create_ui()
         self.refresh_col_list()
@@ -72,6 +72,7 @@ class AppWindow(tk.Tk):
         self.mainloop()
 
     def create_ui(self):
+        ###
         # hosts panel
         self.hosts_panel = ctk.CTkFrame(
             master=self,
@@ -97,7 +98,11 @@ class AppWindow(tk.Tk):
             anchor='w',
         )
 
+        ###
         # filters panel
+        self.int_areas_list = [int(i.split()[0]) for i in self.areas_list]
+        self.int_prices_list = [int(i.split('/')[0][1:]) for i in self.prices_list]
+
         self.filters_panel = ctk.CTkFrame(
             master=self,
             height=40,
@@ -120,22 +125,49 @@ class AppWindow(tk.Tk):
             pady=10,
         )
 
+        self.price_var = tk.StringVar(value="Price")
+        self.price = ctk.CTkOptionMenu(
+            master=self.filters_panel,
+            variable=self.price_var,
+            values=self.prices_list,
+            font=("Calibri", 15),
+            width=10,
+        )
+        self.price.pack(
+            side=tk.RIGHT,
+            padx=(0, 5),
+        )
+
         self.state_var = tk.StringVar(value="State")
         self.state = ctk.CTkOptionMenu(
             master=self.filters_panel,
             values=['Excellent', 'Good', 'Normal', 'Bad'],
             variable=self.state_var,
             font=("Calibri", 15),
+            width=10,
+        )
+        self.state.pack(
+            side=tk.RIGHT,
+            padx=(0, 5),
         )
 
-        self.area_var = ctk.StringVar(value="Area")
-        self.area = ctk.CTkOptionMenu(
+        self.area = ctk.CTkSlider(
             master=self.filters_panel,
-            values=self.areas_list,
-            variable=self.area_var,
-            font=("Calibri", 15),
+            width=80,
+            from_=0,
+            to=max(self.int_areas_list),
+            command=self.update_area_display,
         )
         self.area.pack(
+            side=tk.RIGHT,
+            padx=(0, 5),
+        )
+        self.area_display = ctk.CTkLabel(
+            master=self.filters_panel,
+            text=f'Area: {self.area.get()} m^2',
+            font=("Calibri", 15),
+        )
+        self.area_display.pack(
             side=tk.RIGHT,
             padx=(0, 5),
         )
@@ -146,6 +178,7 @@ class AppWindow(tk.Tk):
             values=self.locations_list,
             font=("Calibri", 15),
             variable=self.location_var,
+            width=10,
         )
         self.location.pack(
             side=tk.RIGHT,
@@ -162,6 +195,22 @@ class AppWindow(tk.Tk):
             padx=(0, 5),
         )
 
+        ###
+        # apply filters button
+        self.apply_filters_button = ctk.CTkButton(
+            master=self,
+            text='Apply Filters',
+            font=("Calibri", 15, 'bold'),
+            corner_radius=20,
+            command=self.apply_filters
+        )
+        self.apply_filters_button.pack(
+            fill=tk.X,
+            padx=250,
+            pady=10,
+        )
+
+        ###
         # col list
         self.col_list = ctk.CTkFrame(
             master=self,
@@ -172,6 +221,16 @@ class AppWindow(tk.Tk):
             padx=10,
             pady=(0, 30),
         )
+
+    def apply_filters(self):
+        print('Filters debug message:')
+        print(f'Name: {self.name.get() if self.name.get() != '' else None}')
+        print(f'Area: {self.area.get()}')
+        print(f'State: {self.state.get()}')
+        print(f'Price: {self.price.get()}')
+
+    def update_area_display(self, value):
+        self.area_display.configure(text=f'Area: {int(value)} m^2')
 
     def add_col(self):
         if self.add_window is None or not self.add_window.winfo_exists():
