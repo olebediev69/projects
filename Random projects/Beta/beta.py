@@ -32,6 +32,6 @@ def create_files():
 if __name__ == '__main__':
     create_files()
     from sources.authentication import LoginWindow
-    from sources.app import AppWindow
+    from test import AppWindow
     if LoginWindow():
         AppWindow()
