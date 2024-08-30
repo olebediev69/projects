@@ -334,7 +334,7 @@ class AppWindow(tk.Tk):
             conditions &= col_df['Name'].str.contains(filter_name, case=False, na=False)
         if filter_area != 0:
             filter_area_str = f"{filter_area} m^2"
-            conditions &= col_df['Area'] == filter_area_str
+            conditions &= col_df['Area'] <= filter_area_str
         if filter_state != "State":
             conditions &= col_df['State'] == filter_state
         if filter_price != "Price":
