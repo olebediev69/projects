@@ -2,7 +2,7 @@ import tkinter as tk
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from os import path
-from colorama import Fore, Style, Back
+from colorama import Fore, Style
 import pandas as pd
 import warnings
 import numpy as np
