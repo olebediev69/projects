@@ -8,8 +8,8 @@ from numpy import int64
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme('blue')
 
-data_df = pd.read_csv('/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/data.csv')
-DATA_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/data.csv'
+data_df = pd.read_csv('/Random projects/Studliving (grant project)/csvs/data.csv')
+DATA_PATH = '/Random projects/Studliving (grant project)/csvs/data.csv'
 
 
 def reload_df(path):

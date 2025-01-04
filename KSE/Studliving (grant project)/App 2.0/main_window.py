@@ -23,7 +23,7 @@ class MainApp(tk.Tk):
         self.form_frames = []
 
         # pandas-necessary variables
-        self.COLIVINGS_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/colivings.csv'
+        self.COLIVINGS_PATH = '/Random projects/Studliving (grant project)/csvs/colivings.csv'
         self.colivings_df = pd.read_csv(self.COLIVINGS_PATH)
 
         # announcements for the widgets initialization
@@ -377,4 +377,3 @@ class MainApp(tk.Tk):
 
 if __name__ == '__main__':
     main_app = MainApp()
-

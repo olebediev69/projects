@@ -4,7 +4,7 @@ import os
 
 class Script:
     def __init__(self):
-        self.path = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/App 2.0/script/sample.csv'
+        self.path = '/Random projects/Studliving (grant project)/App 2.0/script/sample.csv'
         self.studlivings = pd.DataFrame([
             {
                 'Name': "Strays but not kids",

@@ -2,12 +2,11 @@ import customtkinter as ctk
 import tkinter as tk
 import pandas as pd
 
-COL_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/colivings.csv'
+COL_PATH = '/Random projects/Studliving (grant project)/csvs/colivings.csv'
 col_df = pd.read_csv(COL_PATH)
-RANGES_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/ranges.csv'
+RANGES_PATH = '/Random projects/Studliving (grant project)/csvs/ranges.csv'
 ranges_df = pd.read_csv(RANGES_PATH)
-PRESET_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/preset.csv'
-PRESET2_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/preset(2).csv'
+
 
 def reload_col(path):
     global col_df
@@ -60,91 +59,19 @@ class AppWindow(tk.Tk):
         self.title('Application')
         self.geometry('800x800')
 
-        # menu
-        self.menu = tk.Menu(self)
-        self.configure(menu=self.menu)
-        self.options_menu = tk.Menu(self.menu, tearoff=0)
-        self.menu.add_cascade(label='Options', menu=self.options_menu)
-        self.options_menu.add_command(label='Reset filters', command=self.reset_filters)
-        self.options_menu.add_command(label='Clear colivings list', command=self.clear_col_list)
-        self.options_menu.add_command(label='Upload coliving data', command=self.upload_col_info)
-
-        self.price_var = tk.StringVar(value="Price")
-        self.state_var = tk.StringVar(value="State")
-
-        reload_col(COL_PATH)
-        reload_ranges(RANGES_PATH)
-
-        # lists for available options
-        self.locations_list = [str(i) for i in ranges_df['Locations'].to_list()]
-        self.areas_list = [str(i) for i in ranges_df['Areas'].to_list()]
-        self.prices_list = [str(i) for i in ranges_df['Prices'].to_list()]
+        self.locations_list = [str(i) for i in ranges_df['Locations'].unique()]
+        self.areas_list = [str(i) for i in ranges_df['Areas'].unique()]
+        self.prices_list = [str(i) for i in ranges_df['Prices'].unique()]
 
         self.create_ui()
         self.refresh_col_list()
-        self.refresh_ui()
 
         self.add_window = None
 
         self.mainloop()
 
-    def upload_col_info(self):
-        global col_df, ranges_df
-        data_df = pd.read_csv(PRESET_PATH)
-        col_df = pd.concat([data_df, col_df], ignore_index=True)
-        col_df.to_csv(COL_PATH, index=False)
-
-        data1_df = pd.read_csv(PRESET2_PATH)
-        ranges_df = pd.concat([ranges_df, data1_df], ignore_index=True)
-        ranges_df.to_csv(RANGES_PATH, index=False)
-
-        reload_col(COL_PATH)
-        self.refresh_ui()
-
-    def reset_filters(self):
-        self.name.delete(0, tk.END)
-        self.name.configure(placeholder_text='Name')
-        self.location.set('Location')
-        self.area.configure(to=max(self.int_areas_list) if self.int_areas_list else 100)
-        self.area_var.set(0)
-        self.state_var.set('State')
-        self.price_var.set('Price')
-        self.update_options()
-
-    def clear_col_list(self):
-        global col_df, ranges_df
-        col_df = pd.DataFrame(columns=col_df.columns)
-        ranges_df = pd.DataFrame(columns=ranges_df.columns)
-
-        col_df.to_csv(COL_PATH, index=False)
-        ranges_df.to_csv(RANGES_PATH, index=False)
-
-        self.refresh_ui()
-
-    def update_options(self):
-        self.locations_list = [str(i) for i in col_df['Location'].unique()]
-        self.areas_list = [str(i) for i in col_df['Area'].unique()]
-        self.prices_list = [str(i) for i in col_df['Price'].unique()]
-
-        self.location['values'] = self.locations_list
-        self.price['values'] = self.prices_list
-
-        self.int_areas_list = [int(i.split()[0]) for i in self.areas_list if i.split()[0].isdigit()]
-        max_area = max(self.int_areas_list) if self.int_areas_list else 100
-        self.area.configure(to=max_area)
-
-        self.area_display.configure(text=f'Area: {self.area.get()} m^2')
-        self.refresh_col_list()
-
-    def refresh_ui(self):
-        self.update_options()
-        self.apply_filters_button.invoke()
-
     def create_ui(self):
         ###
-        self.price_var.set("Price")
-        self.state_var.set("State")
-
         # hosts panel
         self.hosts_panel = ctk.CTkFrame(
             master=self,
@@ -223,13 +150,12 @@ class AppWindow(tk.Tk):
             padx=(0, 5),
         )
 
-        self.area_var = tk.IntVar(value=0)
         self.area = ctk.CTkSlider(
             master=self.filters_panel,
             width=80,
             from_=0,
+            to=max(self.int_areas_list),
             command=self.update_area_display,
-            variable=self.area_var,
         )
         self.area.pack(
             side=tk.RIGHT,
@@ -297,11 +223,10 @@ class AppWindow(tk.Tk):
 
     def apply_filters(self):
         print('Filters debug message:')
-        print(f'Name: {self.name.get() if self.name.get() else None}')
+        print(f'Name: {self.name.get() if self.name.get() != '' else None}')
         print(f'Area: {self.area.get()}')
         print(f'State: {self.state.get()}')
         print(f'Price: {self.price.get()}')
-        self.refresh_col_list()
 
     def update_area_display(self, value):
         self.area_display.configure(text=f'Area: {int(value)} m^2')
@@ -313,46 +238,93 @@ class AppWindow(tk.Tk):
             self.add_window.focus()
 
     def refresh_col_list(self):
-        print("Refreshing col list...")
-        conditions = pd.Series([True] * len(col_df))
 
-        self.apply_condition_filters(conditions)
+        def divider(master):
+            div = ctk.CTkLabel(
+                master=master,
+                font=("Calibri", 13, "bold"),
+                text='|'
+            )
+            div.pack(
+                side=tk.RIGHT,
+                padx=10
+            )
 
-        filtered_df = col_df[conditions]
-        print(f"Filtered entries: {len(filtered_df)}")
-        print(filtered_df.head())  # Print first few rows to verify
-
-        self.populate_col_list(filtered_df)
-
-    def apply_condition_filters(self, conditions):
-        filter_name = self.name.get()
-        filter_area = self.area.get()
-        filter_state = self.state_var.get()
-        filter_price = self.price_var.get()
-
-        if filter_name:
-            conditions &= col_df['Name'].str.contains(filter_name, case=False, na=False)
-        if filter_area != 0:
-            filter_area_str = f"{filter_area} m^2"
-            conditions &= col_df['Area'] <= filter_area_str
-        if filter_state != "State":
-            conditions &= col_df['State'] == filter_state
-        if filter_price != "Price":
-            price_num = int(filter_price.replace('$', '').split('/')[0])
-            filter_price_str = f"${price_num}/month"
-            conditions &= col_df['Price'] == filter_price_str
-
-    def populate_col_list(self, df):
         for widget in self.col_list.winfo_children():
             widget.destroy()
 
-        for i, row in df.iterrows():
-            frame = ctk.CTkFrame(master=self.col_list, fg_color='darkcyan')
-            frame.pack(fill=tk.X, anchor='n', padx=10, pady=(10, 0))
+        for i in range(0, len(col_df)):
+            frame = ctk.CTkFrame(
+                master=self.col_list,
+                fg_color='darkcyan',
+            )
+            frame.pack(
+                fill=tk.X,
+                anchor='n',
+                padx=10,
+                pady=(10, 0),
+            )
+            name = ctk.CTkLabel(
+                master=frame,
+                text=col_df['Name'].values[i],
+                font=("Calibri", 13),
+            )
+            name.pack(
+                side=tk.LEFT,
+                padx=10,
+                pady=10,
+            )
 
-            for col in ['Name', 'Location', 'Area', 'State', 'Price']:
-                label = ctk.CTkLabel(master=frame, text=f"{col}: {row[col]}", font=("Calibri", 13))
-                label.pack(side=tk.LEFT, padx=10, pady=10, expand=True)
+            price = ctk.CTkLabel(
+                master=frame,
+                text=col_df['Price'].values[i],
+                font=("Calibri", 13),
+            )
+            price.pack(
+                side=tk.RIGHT,
+                padx=10,
+                pady=10,
+            )
+
+            divider(frame)
+
+            state = ctk.CTkLabel(
+                master=frame,
+                text=col_df['State'].values[i],
+                font=("Calibri", 13),
+            )
+            state.pack(
+                side=tk.RIGHT,
+                padx=10,
+                pady=10,
+            )
+
+            divider(frame)
+
+            area = ctk.CTkLabel(
+                master=frame,
+                text=col_df['Area'].values[i],
+                font=("Calibri", 13),
+            )
+            area.pack(
+                side=tk.RIGHT,
+                padx=10,
+                pady=10,
+            )
+
+            divider(frame)
+
+            location = ctk.CTkLabel(
+                master=frame,
+                text=col_df['Location'].values[i],
+                font=("Calibri", 13),
+            )
+            location.pack(
+                side=tk.RIGHT,
+                padx=10,
+                pady=10,
+            )
+        self.update_idletasks()
 
 
 class AddWindow(tk.Toplevel):
@@ -363,12 +335,8 @@ class AddWindow(tk.Toplevel):
         self.geometry("400x300")
         self.resizable(False, False)
 
-        self.init_widgets()
-        self.init_filters()
-
         self.bind('<KeyPress>', self.auto_data_fill)
 
-    def init_widgets(self):
         self.name_frame = ctk.CTkFrame(self)
         self.name_frame.pack(padx=20, pady=(30, 5), fill=tk.X)
 
@@ -490,12 +458,6 @@ class AddWindow(tk.Toplevel):
             fill=tk.X,
         )
 
-    def init_filters(self):
-        self.name.set('')
-        self.area.set('0')
-        self.state.set('Select State')
-        self.price.set('0')
-
     def info_display(self, text, color):
         self.info.configure(text=text, text_color=color)
         self.update_idletasks()
@@ -523,18 +485,12 @@ class AddWindow(tk.Toplevel):
                     self.master.refresh_col_list()
 
     def auto_data_fill(self, event):
-        print("Key Pressed:", event.char, event.keysym, event.keycode)
         if event.char == '=' and event.state == 8:
             self.name_var.set('Trap Xata')
             self.location_var.set('Lesi Ukrainky 30B')
             self.area_var.set('440')
             self.state.set('Excellent')
             self.price_var.set('40000')
-        self.name.update()
-        self.location.update()
-        self.area.update()
-        self.state.update()
-        self.price.update()
 
 
 if __name__ == '__main__':

@@ -21,10 +21,8 @@ class HostsApp(tk.Toplevel):
         self.resizable(True, False)
 
         # pandas-necessary variables
-        self.COLIVINGS_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/colivings.csv'
+        self.COLIVINGS_PATH = '/Random projects/Studliving (grant project)/csvs/colivings.csv'
         self.colivings_df = pd.read_csv(self.COLIVINGS_PATH)
-        self.RANGES_PATH = '/Users/oleksandrlebediev/PycharmProjects/projects/Random projects/Beta/csvs/ranges.csv'
-        self.ranges_df = pd.read_csv(self.RANGES_PATH)
 
         # announcements for the widgets initialization
         self.header_panel = None
@@ -185,22 +183,36 @@ class HostsApp(tk.Toplevel):
     # buttons/info-related functions
     def add_studliving(self):
         self.add_button.configure(state='disabled')
-        name = self.name.get()
-        location = self.location.get()
-        area = self.area.get()
-        state = self.state.get()
-        price = self.price.get()
+        studliving_data = self.collect_data()
+        if self.validate_data(studliving_data):
+            self.save_data(studliving_data)
+            self.parent.clear_and_reload_ui()
+        self.add_button.configure(state='normal')
 
-        self.save_data_to_csv(name, location, area, state, price)
+    def collect_data(self):
+        return {
+            "name": self.name.get(),
+            "location": self.location.get(),
+            "area": self.area.get(),
+            "state": self.state.get(),
+            "price": self.price.get()
+        }
 
-        self.parent.refresh_ui()
+    def validate_data(self, data):
+        if not all(data.values()):
+            self.display_information("Some fields are empty.", "red")
+            return False
+        if not data["area"].isnumeric() or not data["price"].isnumeric():
+            self.display_information("Area and price must be numeric.", "red")
+            return False
+        if data["state"] == "Not selected":
+            self.display_information("State not selected.", "red")
+            return False
+        return True
 
-        print()
-        print("# Add studliving button's pressed")
-        print()
-        print('-' * 50)
-
-        print(self.colivings_df)
+    def save_data(self, data):
+        self.save_data_to_csv(data["name"], data["location"], data["area"], data["state"], data["price"])
+        self.display_information("Data saved successfully.", "green")
 
     def display_information(self, message, color):
         self.info_field.configure(text=message, text_color=color)
@@ -208,7 +220,6 @@ class HostsApp(tk.Toplevel):
     # pandas-related functions
     def reload_pandas(self):
         self.colivings_df = pd.read_csv(self.COLIVINGS_PATH)
-        self.ranges_df = pd.read_csv(self.RANGES_PATH)
 
     def info_validation(self, name, area, state, price):
         self.colivings_df = pd.read_csv(self.COLIVINGS_PATH)
@@ -235,9 +246,6 @@ class HostsApp(tk.Toplevel):
             new_data_colivings_df = pd.concat([new_data_colivings_df, self.colivings_df], ignore_index=True)
             new_data_colivings_df.to_csv(self.COLIVINGS_PATH, index=False)
 
-            new_data_ranges_df = pd.DataFrame([{'Locations': location, 'Areas': area, 'Prices': price}])
-            new_data_ranges_df = pd.concat([new_data_ranges_df, self.ranges_df], ignore_index=True)
-            new_data_ranges_df.to_csv(self.RANGES_PATH, index=False)
             self.reload_pandas()
             self.display_information('Data saved.', color='green')
             self.after(1000, self.destroy)
